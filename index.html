@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur de Citations d'Anime</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: url('https://www.transparenttextures.com/patterns/clouds.png'); /* Fond de nuages */
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            color: #333;
+        }
+        .quote-box {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 400px;
+            transition: transform 0.2s;
+        }
+        .quote-box:hover {
+            transform: scale(1.05);
+        }
+        h2 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #5cb85c;
+        }
+        p {
+            font-size: 18px;
+            font-style: italic;
+            margin: 15px 0;
+        }
+        button {
+            padding: 12px 20px;
+            border: none;
+            background: #5cb85c;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s, transform 0.2s;
+        }
+        button:hover {
+            background: #4cae4c;
+            transform: translateY(-2px);
+        }
+        .creator {
+            margin-top: 40px;
+            font-size: 20px;
+            color: #5cb85c;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quote-box">
+    <h2>Citation d'Anime Inspirante</h2>
+    <p id="quote">Cliquez sur le bouton pour générer une citation.</p>
+    <button onclick="generateQuote()">Nouvelle Citation</button>
+</div>
+
+<div class="creator">Créé par Ange Sk</div>
+
+<script>
+    const quotes = [
+        "L'important ce n'est pas la destination, mais le voyage. - Jiraiya (Naruto)",
+        "Il n'y a pas de raccourci vers le lieu où cela vaut la peine d'aller. - J.R.R. Tolkien",
+        "La peur est comme un monstre. Si tu lui fais face, il s'en va. - Shoyo Hinata (Haikyuu!!)",
+        "Les rêves ne s'accomplissent pas tant que tu ne fais pas d'efforts. - Sakura Haruno (Naruto)",
+        "Si tu ne te bats pas pour ce que tu veux, ne pleure pas pour ce que tu perds. - Koro-sensei (Assassination Classroom)",
+        "Ce n'est pas la force qui te rend fort, mais ta volonté. - Goku (Dragon Ball)",
+        "Quand tu perds, ça fait mal. Mais la douleur te rend plus fort. - Izuku Midoriya (My Hero Academia)",
+        "Les vrais héros ne naissent pas, ils se forment. - Erza Scarlet (Fairy Tail)",
+        "La vie n'est pas un jeu. Il n'y a pas de recommencement. - Ash Ketchum (Pokémon)",
+        "Ne te laisse jamais abattre par tes échecs. - Edward Elric (Fullmetal Alchemist)",
+        "Si tu as un rêve, protège-le. - Chris Gardner (The Pursuit of Happyness)",
+        "Il est ok de pleurer, mais il faut se relever. - Nami (One Piece)",
+        "Ta vie est précieuse, ne la gaspille pas. - Luffy (One Piece)",
+        "Dans la vie, il y a des moments où tu dois te battre pour ce qui est juste. - Shanks (One Piece)",
+        "Ce qui est perdu est perdu, mais la force d'avancer est ce qui compte. - Koro-sensei (Assassination Classroom)",
+        "Il faut toujours garder espoir, même dans les moments les plus sombres. - Gintoki Sakata (Gintama)",
+        "Les larmes ne font pas de toi un faible, elles témoignent de ta force intérieure. - Hinata Hyuga (Naruto)",
+        "Un vrai ami est celui qui te soutient même dans les pires moments. - Monkey D. Luffy (One Piece)",
+        "Le monde est vaste, mais il est à nous de le découvrir. - Natsu Dragneel (Fairy Tail)",
+        "Rappelle-toi que chaque pas compte, même les plus petits. - Shoyo Hinata (Haikyuu!!)",
+        "Il n'y a pas de bonheur sans un peu de douleur. - Kirito (Sword Art Online)",
+        "La détermination est la clé du succès. - Naruto Uzumaki (Naruto)",
+        "Les rêves sont des messages de l'âme. - Shinra Kusakabe (Fire Force)",
+        "Ne crains jamais de tomber, car chaque chute est une leçon. - Luffy (One Piece)",
+        "Chaque jour est une nouvelle chance de devenir meilleur. - Izuku Midoriya (My Hero Academia)",
+        "La vie est comme une aventure, il faut la vivre pleinement. - Goku (Dragon Ball)",
+        "Ne sous-estime jamais le pouvoir de l'amitié. - Sasuke Uchiha (Naruto)",
+        "Les cicatrices racontent des histoires, et chaque histoire mérite d'être entendue. - Zoro (One Piece)",
+        "Il y a de la beauté même dans la tristesse. - Nagisa Shiota (Assassination Classroom)",
+        "L'espoir est le dernier refuge de ceux qui ont peur. - Erza Scarlet (Fairy Tail)",
+        "Ne te laisse pas abattre par les critiques, fais ce que tu aimes. - Shoyo Hinata (Haikyuu!!)",
+        "Le vrai courage, c'est de se relever après chaque chute. - Natsu Dragneel (Fairy Tail)",
+        "La vie est un défi, mais chaque défi est une opportunité. - Edward Elric (Fullmetal Alchemist)",
+        "L'amour et l'amitié sont les plus grands pouvoirs. - Usagi Tsukino (Sailor Moon)",
+        "Quand tu as un but, tu as une raison de te battre. - Koro-sensei (Assassination Classroom)",
+        "La vie est comme un manga, écris ta propre histoire. - Shinsuke Kudo (Blue Exorcist)",
+        "N'oublie jamais les personnes qui croient en toi. - Kakashi Hatake (Naruto)",
+        "Les rêves ne s'éteignent jamais tant que tu continues d'y croire. - Gintoki Sakata (Gintama)",
+        "Lorsque tu perds, n'oublie pas que tu as appris. - Shoyo Hinata (Haikyuu!!)",
+        "La gentillesse est un acte de courage. - Koro-sensei (Assassination Classroom)",
+        "Le bonheur n'est pas un but, mais un chemin. - Kirito (Sword Art Online)",
+        "Chaque jour est une nouvelle page de ton histoire. - Goku (Dragon Ball)",
+        "Il faut parfois être perdu pour retrouver son chemin. - Edward Elric (Fullmetal Alchemist)",
+        "Ne laisse jamais quelqu'un te dire que tu ne peux pas faire quelque chose. - Will Smith (The Pursuit of Happyness)",
+        "Chaque rencontre est un pas vers notre destin. - Shinsuke Kudo (Blue Exorcist)",
+        "L'espoir est la lumière dans l'obscurité. - Shoyo Hinata (Haikyuu!!)",
+        "La force vient de l'intérieur, n'oublie jamais cela. - Erza Scarlet (Fairy Tail)",
+        "Accepte tes erreurs, c'est de là que tu grandis. - Kakashi Hatake (Naruto)",
+        "Ce qui ne nous tue pas nous rend plus fort. - Goku (Dragon Ball)",
+        "Les souvenirs sont éternels, prends soin d'eux. - Nami (One Piece)",
+        "Il n'y a pas de chemin facile, mais chaque pas est un pas vers l'avant. - Izuku Midoriya (My Hero Academia)",
+        "La vie est un voyage, savoure chaque instant. - Koro-sensei (Assassination Classroom)",
+        "Les vrais amis ne sont jamais loin, même dans les pires moments. - Monkey D. Luffy (One Piece)",
+        "La détermination est le premier pas vers la réussite. - Naruto Uzumaki (Naruto)",
+        "Tu es plus fort que tu ne le crois. - Erza Scarlet (Fairy Tail)",
+        "Les cicatrices sont des souvenirs de combats passés. - Zoro (One Piece)",
+        "Il y a toujours de l'espoir même dans les moments les plus sombres. - Kirito (Sword Art Online)",
+        "Chaque échec est une leçon, apprends d'eux. - Edward Elric (Fullmetal Alchemist)",
+        "Les rêves sont des étoiles, et il suffit de les suivre. - Natsu Dragneel (Fairy Tail)",
+        "La vie est pleine de rebondissements, sois prêt à en profiter. - Koro-sensei (Assassination Classroom)",
+        "Rappelle-toi que tu es capable de grandes choses. - Izuku Midoriya (My Hero Academia)",
+        "La force véritable vient de la compassion. - Natsu Dragneel (Fairy Tail)",
+        "L'espoir est la lumière qui guide nos pas. - Erza Scarlet (Fairy Tail)",
+        "Les larmes sont des mots que le cœur ne peut exprimer. - Nagisa Shiota (Assassination Classroom)",
+        "La vie est pleine de surprises, il suffit de croire. - Gintoki Sakata (Gintama)",
+        "Les rêves sont les ailes qui nous portent. - Shoyo Hinata (Haikyuu!!)",
+        "La vie est un défi à relever, pas un problème à résoudre. - Edward Elric (Fullmetal Alchemist)",
+        "Tu as le pouvoir de changer ta propre histoire. - Kirito (Sword Art Online)",
+        "Les amis sont des trésors inestimables. - Usagi Tsukino (Sailor Moon)",
+        "Il est temps de se battre pour ce en quoi tu crois. - Jiraiya (Naruto)",
+        "Les étoiles brillent le plus dans les nuits les plus sombres. - Gintoki Sakata (Gintama)",
+        "La détermination te mènera loin. - Natsu Dragneel (Fairy Tail)",
+        "La vie est une série de choix, fais les bons. - Koro-sensei (Assassination Classroom)",
+        "Ne laisse jamais la peur t'arrêter. - Izuku Midoriya (My Hero Academia)",
+        "La gentillesse est une force. - Kakashi Hatake (Naruto)",
+        "La loyauté est la clé des vraies amitiés. - Zoro (One Piece)",
+        "Chaque cicatrice porte en elle une histoire de survie. - Luffy (One Piece)",
+        "Apprends à te relever, même quand c'est difficile. - Sakura Haruno (Naruto)",
+        "Les étoiles sont des rêves qui brillent dans l'obscurité. - Gintoki Sakata (Gintama)",
+        "La douleur fait partie de la vie, mais n'oublie pas de sourire. - Erza Scarlet (Fairy Tail)",
+        "Les cicatrices sont les médailles des combattants. - Kirito (Sword Art Online)",
+        "La vie est un combat, mais chaque combat en vaut la peine. - Natsu Dragneel (Fairy Tail)",
+        "Rappelle-toi que même les plus petits peuvent changer le monde. - Izuku Midoriya (My Hero Academia)",
+        "Les rêves ne meurent jamais, ils dorment juste. - Shinsuke Kudo (Blue Exorcist)",
+        "L'amour est ce qui nous unit tous. - Usagi Tsukino (Sailor Moon)",
+        "Ne crains pas d'échouer, crains de ne pas essayer. - Goku (Dragon Ball)"
+    ];
+
+    function generateQuote() {
+        const randomIndex = Math.floor(Math.random() * quotes.length);
+        document.getElementById('quote').innerText = quotes[randomIndex];
+    }
+</script>
+
+</body>
+</html>
+
